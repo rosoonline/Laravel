@@ -57,9 +57,8 @@
 			$this->user->password = bcrypt($request->password);
 			$this->user->save();
 			
-			//code for registering a user goes here.
 			$this->auth->login($this->user);
-			return redirect('/dash-board');
+			return redirect('/dashboard');
 		}
 		 
 		/**
@@ -82,11 +81,11 @@
 		{
 			if ($this->auth->attempt($request->only('email', 'password')))
 			{
-				return redirect('/dash-board');
+				return redirect('/dashboard');
 			}
 			 
-			return redirect('/login')->withErrors([
-			'email' => 'The credentials you entered did not match our records. Try again?',
+			return redirect('/auth/login')->withErrors([
+			'email' => 'The credentials you entered did not match our records.',
 			]);
 		}
 		 
