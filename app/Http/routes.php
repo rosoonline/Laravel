@@ -11,14 +11,14 @@
 |
 */
 
-Route::get('/', 'WelcomeController@index');
-
-Route::get('home', 'HomeController@index');
+Route::get('/',['as'=>'home','uses'=>'HomeController@index']);
+Route::get('/dashboard',['as'=>'dashboard','uses'=>"DashBoardController@index"]);
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
 ]);
+Route::controller('/','Auth\AuthController');
 
 // Provide controller methods with object instead of ID
 Route::model('tasks', 'Task');

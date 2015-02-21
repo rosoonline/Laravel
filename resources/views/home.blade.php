@@ -3,14 +3,10 @@
 @section('content')
 <div class="container">
 	<div class="row">
-		<div class="col-md-10 col-md-offset-1">
-			<div class="panel panel-default">
-				<div class="panel-heading">Home</div>
-
-				<div class="panel-body">
-					You are logged in!
-				</div>
-			</div>
+		<div class="col-md-12">
+			<p>Use the following links to login / register:
+			{!!HTML::link('/login','Login',['class'=>'btn btn-link'])!!}/{!!HTML::link('/register','Register',['class'=>'btn btn-link'])!!}
+			</p>
 		</div>
 	</div>
 </div>
