@@ -6,6 +6,18 @@
 		
 		{!!Form::open(['url'=>'/auth/register','class'=>'form form-horizontal','style'=>'margin-top:50px'])!!}
 		<div class="form-group">
+			{!! Form::label('namefirst','First Name:',['class'=>'col-sm-3 control-label']) !!}
+			<div class="col-sm-8">
+				{!! Form::text('namefirst',Input::old('namefirst'),['class'=>'form-control']) !!}
+			</div>
+		</div>
+		<div class="form-group">
+			{!! Form::label('namelast','Last Name:',['class'=>'col-sm-3 control-label']) !!}
+			<div class="col-sm-8">
+				{!! Form::text('namelast',Input::old('namelast'),['class'=>'form-control']) !!}
+			</div>
+		</div>
+		<div class="form-group">
 			{!! Form::label('email','Email:',['class'=>'col-sm-3 control-label']) !!}
 			<div class="col-sm-8">
 				{!! Form::text('email',Input::old('email'),['class'=>'form-control']) !!}

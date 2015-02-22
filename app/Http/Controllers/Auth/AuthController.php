@@ -53,6 +53,8 @@
 		*/
 		public function postRegister(RegisterRequest $request)
 		{
+			$this->user->namefirst = $request->namefirst;
+			$this->user->namelast = $request->namelast;
 			$this->user->email = $request->email;
 			$this->user->password = bcrypt($request->password);
 			$this->user->save();

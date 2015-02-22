@@ -11,21 +11,22 @@
 |
 */
 
-// assign what urls use what control and method
+// assign what urls use what controller and method
 Route::get('/',['as'=>'home','uses'=>'HomeController@index']);
 Route::get('/dashboard',['as'=>'dashboard','uses'=>"DashBoardController@index"]);
 
-// assign names to controllers
+// assign names to controllers to use. auth and password are compulsory for authentication
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
 ]);
 
-// Provide controller methods with object instead of ID
+// route model binding - Provide controller methods with access to model object by name instead of ID
 Route::model('tasks', 'Task');
 Route::model('projects', 'Project');
 
-
+// make the projects and tasks controller available to the following routes/nested routes so they have RESTful actions, such as create, edit etc
+// resource controllers are made available to routes that require CRUD for example.
 Route::resource('projects', 'ProjectsController');
 Route::resource('projects.tasks', 'TasksController');
 

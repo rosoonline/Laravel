@@ -1,14 +1,24 @@
 <?php namespace App\Http\Controllers;
 
-use App\Project;
+use App\Project; // use project model
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Input;
-use Redirect;
+use Input; // for form buttons
+use Redirect; // for redirects
 
 use Illuminate\Http\Request;
 
 class ProjectsController extends Controller {
+
+	 /**
+	* Create a new controller instance.
+	*
+	* @return void
+	*/
+	public function __construct()
+	{
+		$this->middleware('auth');
+	}
 
 	protected $rules = [
 		'name' => ['required', 'min:3'],
