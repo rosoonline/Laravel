@@ -11,10 +11,42 @@
 |
 */
 
+use Goodby\CSV\Import\Standard\Lexer;
+use Goodby\CSV\Import\Standard\Interpreter;
+use Goodby\CSV\Import\Standard\LexerConfig;
+
 // assign what urls use what controller and method
 Route::get('/',['as'=>'home','uses'=>'HomeController@index']);
 Route::get('/dashboard',['as'=>'dashboard','uses'=>"DashBoardController@index"]);
 Route::post('/orders/import',['uses'=>"OrdersController@import"]);
+
+Route::post('/orders/import', function(){
+
+	$pdo = new PDO('mysql:host='.$_ENV['DB_HOST'].';dbname='.$_ENV['DB_DATABASE'], $_ENV['DB_USERNAME'], $_ENV['DB_PASSWORD']);
+	$pdo->query('CREATE TABLE IF NOT EXISTS user (id INT, `name` VARCHAR(255), email VARCHAR(255))');
+
+	$config = new LexerConfig();
+	$lexer = new Lexer($config);
+
+	$interpreter = new Interpreter();
+
+	$interpreter->addObserver(function(array $columns) use ($pdo) {
+		$checkStmt = $pdo->prepare('SELECT count(*) FROM user WHERE id = ?');
+		$checkStmt->execute(array(($columns[0])));
+
+		$count = $checkStmt->fetchAll()[0][0];
+
+		if ($count === '0') {
+			$stmt = $pdo->prepare('INSERT INTO user (id, name, email) VALUES (?, ?, ?)');
+			$stmt->execute($columns);
+		}
+	});
+
+	$lexer->parse(Input::file('file'), $interpreter);
+
+	return Redirect::route('orders.index')->with('message', 'Orders imported successfully');
+ 
+});
 
 // assign names to controllers to use. auth and password are compulsory for authentication
 Route::controllers([

@@ -2,6 +2,10 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
 use Illuminate\Http\Request;
 
 // extras
@@ -9,11 +13,14 @@ use App\Order;
 use Input;
 use Redirect;
 
+<<<<<<< HEAD
 use PDO;
 use Goodby\CSV\Import\Standard\Lexer;
 use Goodby\CSV\Import\Standard\Interpreter;
 use Goodby\CSV\Import\Standard\LexerConfig;
 
+=======
+>>>>>>> origin/master
 class OrdersController extends Controller {
 
 	 /**
@@ -36,6 +43,7 @@ class OrdersController extends Controller {
 		$orders = Order::all();
 		return view('orders.index', compact('orders'));
 	}
+<<<<<<< HEAD
 	
 	/**
 	 * Show the form for creating a new resource.
@@ -46,12 +54,15 @@ class OrdersController extends Controller {
 	{
 	
 	}
+=======
+>>>>>>> origin/master
 
 	/**
 	 * Show the form for creating a new resource.
 	 *
 	 * @return Response
 	 */
+<<<<<<< HEAD
 	public function import()
 	{
 		$pdo = new PDO('mysql:host='.$_ENV['DB_HOST'].';dbname='.$_ENV['DB_DATABASE'], $_ENV['DB_USERNAME'], $_ENV['DB_PASSWORD']);
@@ -75,6 +86,11 @@ class OrdersController extends Controller {
 
 		$lexer->parse(Input::file('file'), $interpreter);
 		return Redirect::route('orders.index')->with('message', 'Orders imported successfully');
+=======
+	public function create()
+	{
+		//
+>>>>>>> origin/master
 	}
 
 	/**
