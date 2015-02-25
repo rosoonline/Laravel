@@ -2,12 +2,33 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
+>>>>>>> origin/master
 use Illuminate\Http\Request;
 
 // extras
 use App\Order;
+<<<<<<< HEAD
 use Redirect;
 
+=======
+use Input;
+use Redirect;
+
+<<<<<<< HEAD
+use PDO;
+use Goodby\CSV\Import\Standard\Lexer;
+use Goodby\CSV\Import\Standard\Interpreter;
+use Goodby\CSV\Import\Standard\LexerConfig;
+
+=======
+>>>>>>> origin/master
+>>>>>>> origin/master
 class OrdersController extends Controller {
 
 	 /**
@@ -30,6 +51,10 @@ class OrdersController extends Controller {
 		$orders = Order::all();
 		return view('orders.index', compact('orders'));
 	}
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> origin/master
 	
 	/**
 	 * Show the form for creating a new resource.
@@ -40,12 +65,18 @@ class OrdersController extends Controller {
 	{
 	
 	}
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> origin/master
+>>>>>>> origin/master
 
 	/**
 	 * Show the form for creating a new resource.
 	 *
 	 * @return Response
 	 */
+<<<<<<< HEAD
 	public function import()
 	{
 		//$orders = Order::all();
@@ -62,6 +93,37 @@ class OrdersController extends Controller {
 		if (Order::upload()) {
 			return Redirect::route('dashboard')->with('message', 'Orders imported successfully');
 		} else {return Redirect::route('dashboard')->withErrors('Orders did not get imported');}
+=======
+<<<<<<< HEAD
+	public function import()
+	{
+		$pdo = new PDO('mysql:host='.$_ENV['DB_HOST'].';dbname='.$_ENV['DB_DATABASE'], $_ENV['DB_USERNAME'], $_ENV['DB_PASSWORD']);
+
+		$config = new LexerConfig();
+		$lexer = new Lexer($config);
+
+		$interpreter = new Interpreter();
+
+		$interpreter->addObserver(function(array $columns) use ($pdo) {
+			$checkStmt = $pdo->prepare('SELECT count(*) FROM user WHERE id = ?');
+			$checkStmt->execute(array(($columns[0])));
+
+			$count = $checkStmt->fetchAll()[0][0];
+
+			if ($count === '0') {
+				$stmt = $pdo->prepare('INSERT INTO user (id, name, email) VALUES (?, ?, ?)');
+				$stmt->execute($columns);
+			}
+		});
+
+		$lexer->parse(Input::file('file'), $interpreter);
+		return Redirect::route('orders.index')->with('message', 'Orders imported successfully');
+=======
+	public function create()
+	{
+		//
+>>>>>>> origin/master
+>>>>>>> origin/master
 	}
 
 	/**

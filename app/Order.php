@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 
+<<<<<<< HEAD
 // extras
 use PDO;
 use Goodby\CSV\Import\Standard\Lexer;
@@ -42,5 +43,16 @@ class Order extends Model {
 		return true;
 		
 	}
+=======
+class Order extends Model {
+
+<<<<<<< HEAD
+	protected function ordersImport() {
+		
+	}
+=======
+	//
+>>>>>>> origin/master
+>>>>>>> origin/master
 
 }

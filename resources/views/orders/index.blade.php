@@ -7,6 +7,24 @@
 		<div class="col-md-12">
 
     <h2>Orders</h2>
+<<<<<<< HEAD
+=======
+	
+	<p>
+		{!! Form::open(array('url'=>'orders/import','files'=>true)) !!}
+
+		  {!! Form::label('file','Upload file',array('id'=>'','class'=>'')) !!}
+		  {!! Form::file('file','',array('id'=>'','class'=>'')) !!}
+		  <br/>
+		  <!-- submit buttons -->
+		  {!! Form::submit('Save') !!}
+		  
+		  <!-- reset buttons -->
+		  {!! Form::reset('Reset') !!}
+
+		{!! Form::close() !!}
+	</p>
+>>>>>>> origin/master
  
 	<p>
 		@if ( !$orders->count() )
