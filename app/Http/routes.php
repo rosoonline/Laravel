@@ -14,6 +14,8 @@
 // assign what urls use what controller and method
 Route::get('/',['as'=>'home','uses'=>'HomeController@index']);
 Route::get('/dashboard',['as'=>'dashboard','uses'=>"DashBoardController@index"]);
+Route::get('/orders/import',['as' => 'orders.import', 'uses'=>"OrdersController@import"]);
+Route::post('/orders/upload',['uses'=>"OrdersController@upload"]);
 
 // assign names to controllers to use. auth and password are compulsory for authentication
 Route::controllers([
@@ -24,11 +26,13 @@ Route::controllers([
 // route model binding - Provide controller methods with access to model object by name instead of ID
 Route::model('tasks', 'Task');
 Route::model('projects', 'Project');
+Route::model('orders', 'Order');
 
 // make the projects and tasks controller available to the following routes/nested routes so they have RESTful actions, such as create, edit etc
 // resource controllers are made available to routes that require CRUD for example.
 Route::resource('projects', 'ProjectsController');
 Route::resource('projects.tasks', 'TasksController');
+Route::resource('orders', 'OrdersController');
 
 // let the first part of the url within projects/tasks be the slug name of the item
 Route::bind('projects', function($value, $route) {
