@@ -16,7 +16,22 @@ class CreateOrdersTable extends Migration {
 		{
 			$table->increments('id');
 			$table->string('customer_code')->default('');
+<<<<<<< HEAD
 			$table->date('date')->default('000-00-00');
+=======
+<<<<<<< HEAD
+			$table->date('date')->default('000-00-00');
+=======
+<<<<<<< HEAD
+			$table->date('date')->default('000-00-00');
+=======
+<<<<<<< HEAD
+			$table->date('date')->default('000-00-00');
+=======
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
 			$table->integer('sales')->unsigned()->default(0);
 			$table->decimal('revenue', 5, 2)->default('00.00');
 			$table->string('product')->default('');

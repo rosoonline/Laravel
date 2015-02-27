@@ -7,9 +7,16 @@
 		<div class="col-md-12">
 
     <h2>Orders</h2>
+<<<<<<< HEAD
 	
 	<p>
 		{!! Form::open(array('url' => 'orders', 'method' => 'get')) !!}
+=======
+<<<<<<< HEAD
+	
+	<p>
+		{!! Form::open(array('url' => '/orders')) !!}
+>>>>>>> origin/master
 		<p>
 			{!! Form::selectMonth('month', $currentmonth); !!}
 			{!! Form::selectRange('year', 2010, 2025, $currentyear); !!}
@@ -18,10 +25,44 @@
 		{!! Form::close() !!}
 	</p>
 
+<<<<<<< HEAD
+=======
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+	
+	<p>
+		{!! Form::open(array('url'=>'orders/import','files'=>true)) !!}
+
+		  {!! Form::label('file','Upload file',array('id'=>'','class'=>'')) !!}
+		  {!! Form::file('file','',array('id'=>'','class'=>'')) !!}
+		  <br/>
+		  <!-- submit buttons -->
+		  {!! Form::submit('Save') !!}
+		  
+		  <!-- reset buttons -->
+		  {!! Form::reset('Reset') !!}
+
+		{!! Form::close() !!}
+	</p>
+>>>>>>> origin/master
+>>>>>>> origin/master
+ 
+>>>>>>> origin/master
+>>>>>>> origin/master
 	<p>
 		@if ( !$orders->count() )
 			You have no orders
 		@else
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> origin/master
+>>>>>>> origin/master
 			<table id="table_orders" class="display">
 				<thead>
 					<tr>
@@ -52,18 +93,54 @@
 				@endforeach
 				</tbody>
 			</table>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+			<ul>
+				@foreach( $orders as $order )
+					<li>
+						{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('orders.destroy', $order->slug))) !!}
+							<a href="{{ route('orders.show', $order->slug) }}">{{ $order->name }}</a>
+							(
+								{!! link_to_route('orders.edit', 'Edit', array($order->slug), array('class' => 'btn btn-info')) !!},
+								{!! Form::submit('Delete', array('class' => 'btn btn-danger')) !!}
+							)
+						{!! Form::close() !!}
+					</li>
+				@endforeach
+			</ul>
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
 		@endif
 	</p>
 
 		</div>
 	</div>
 </div>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> origin/master
 
 <!--script type="text/javascript">
 //<![CDATA[
 $(document).ready(function() {
     $('#table_orders').dataTable( {
 	
+<<<<<<< HEAD
+=======
+=======
+<<<<<<< HEAD
+
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function() {
+    $('#table_orders').dataTable( {
+>>>>>>> origin/master
+>>>>>>> origin/master
         "footerCallback": function ( row, data, start, end, display ) {
             var api = this.api(), data;
  
@@ -95,6 +172,10 @@ $(document).ready(function() {
             $( api.column( 4 ).footer() ).html(
                 '&pound;'+pageTotal +' ( &pound;'+ total +' total)'
             );
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> origin/master
         },
 		
 		"oLanguage": {
@@ -105,5 +186,17 @@ $(document).ready(function() {
 } );
 //]]>
 </script--> 
+<<<<<<< HEAD
+=======
+=======
+        }
+    } );
+} );
+//]]>
+</script> 
+=======
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
 	
 @endsection
