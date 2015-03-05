@@ -5,7 +5,7 @@
 	<div class="row">
 		<div class="col-md-12">
 			<p>
-			Welcome to the Dashboard
+				Welcome to the Dashboard
 			</p>
 		</div>
 	</div>
