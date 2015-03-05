@@ -24,9 +24,12 @@
 	<!-- DataTables -->
 	<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.5/js/jquery.dataTables.js"></script>
 	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.5/css/jquery.dataTables.css">
+<<<<<<< HEAD
 	
 	<!-- Chart.js - for graphs -->
 	<script src="/laravel/public/js/canvasjs.min.js"></script>
+=======
+>>>>>>> origin/master
 
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

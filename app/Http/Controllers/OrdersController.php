@@ -2,6 +2,7 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+<<<<<<< HEAD
 use Illuminate\Http\Request;
 
 // extras
@@ -10,6 +11,79 @@ use App\Order;
 use Redirect;
 use Input;
 
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+use Illuminate\Http\Request;
+
+// extras
+use App\Order;
+<<<<<<< HEAD
+use Redirect;
+use Input;
+
+=======
+<<<<<<< HEAD
+use Redirect;
+use Input;
+
+=======
+<<<<<<< HEAD
+use Redirect;
+use Input;
+
+=======
+<<<<<<< HEAD
+use Redirect;
+use Input;
+
+=======
+<<<<<<< HEAD
+use Redirect;
+
+=======
+<<<<<<< HEAD
+use Redirect;
+
+=======
+use Input;
+use Redirect;
+
+<<<<<<< HEAD
+use PDO;
+use Goodby\CSV\Import\Standard\Lexer;
+use Goodby\CSV\Import\Standard\Interpreter;
+use Goodby\CSV\Import\Standard\LexerConfig;
+
+=======
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
 class OrdersController extends Controller {
 
 	 /**
@@ -29,6 +103,13 @@ class OrdersController extends Controller {
 	 */
 	public function index()
 	{
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> origin/master
+>>>>>>> origin/master
 		$month 			= str_pad(\Request::input('month', date('m')), 2, "0", STR_PAD_LEFT);
 		$year 			= \Request::get('year',date('Y'));
 
@@ -36,6 +117,7 @@ class OrdersController extends Controller {
 		return view('orders.index', compact('orders'))->with('month', $month)->with('year', $year);
 		//return view('orders.index', array('orders' => $orders));
 	}
+<<<<<<< HEAD
 	
 	/**
 	 * Display a listing of the resource.
@@ -60,6 +142,39 @@ class OrdersController extends Controller {
 		return view('orders.graph', compact('orders'))->with('month', $month)->with('year', $year)->with('customer_codes', $customer_codes);
 		//return view('orders.index', array('orders' => $orders));
 	}
+=======
+<<<<<<< HEAD
+=======
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> origin/master
+		$currentmonth 			= str_pad(\Request::input('month', date('m')), 2, "0", STR_PAD_LEFT);
+		$currentyear 			= \Request::get('year',date('Y'));
+
+		$orders 				= Order::where('date', '=', '-01')->get();
+		return view('orders.index', compact('orders'))->with('currentmonth', $currentmonth)->with('currentyear', $currentyear);
+		//return view('orders.index', array('orders' => $orders));
+	}
+<<<<<<< HEAD
+=======
+=======
+		$orders = Order::all();
+		return view('orders.index', compact('orders'));
+	}
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
 	
 	/**
 	 * Show the form for creating a new resource.
@@ -70,12 +185,54 @@ class OrdersController extends Controller {
 	{
 	
 	}
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
 
 	/**
 	 * Show the form for creating a new resource.
 	 *
 	 * @return Response
 	 */
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
 	public function import()
 	{
 		//$orders = Order::all();
@@ -92,6 +249,55 @@ class OrdersController extends Controller {
 		if (Order::upload()) {
 			return Redirect::route('dashboard')->with('message', 'Orders imported successfully');
 		} else {return Redirect::route('dashboard')->withErrors('Orders did not get imported');}
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+<<<<<<< HEAD
+	public function import()
+	{
+		$pdo = new PDO('mysql:host='.$_ENV['DB_HOST'].';dbname='.$_ENV['DB_DATABASE'], $_ENV['DB_USERNAME'], $_ENV['DB_PASSWORD']);
+
+		$config = new LexerConfig();
+		$lexer = new Lexer($config);
+
+		$interpreter = new Interpreter();
+
+		$interpreter->addObserver(function(array $columns) use ($pdo) {
+			$checkStmt = $pdo->prepare('SELECT count(*) FROM user WHERE id = ?');
+			$checkStmt->execute(array(($columns[0])));
+
+			$count = $checkStmt->fetchAll()[0][0];
+
+			if ($count === '0') {
+				$stmt = $pdo->prepare('INSERT INTO user (id, name, email) VALUES (?, ?, ?)');
+				$stmt->execute($columns);
+			}
+		});
+
+		$lexer->parse(Input::file('file'), $interpreter);
+		return Redirect::route('orders.index')->with('message', 'Orders imported successfully');
+=======
+	public function create()
+	{
+		//
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
 	}
 
 	/**
@@ -112,7 +318,27 @@ class OrdersController extends Controller {
 	 */
 	public function show($id)
 	{
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+
+=======
+<<<<<<< HEAD
+
+=======
+<<<<<<< HEAD
+
+=======
+<<<<<<< HEAD
+
+=======
+		//
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
 	}
 
 	/**
