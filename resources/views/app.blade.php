@@ -22,14 +22,13 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 	
 	<!-- DataTables -->
-	<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.5/js/jquery.dataTables.js"></script>
+	<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/tabletools/2.2.3/js/dataTables.tableTools.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.5/css/jquery.dataTables.css">
-<<<<<<< HEAD
+	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/tabletools/2.2.3/css/dataTables.tableTools.css">
 	
 	<!-- Chart.js - for graphs -->
 	<script src="/laravel/public/js/canvasjs.min.js"></script>
-=======
->>>>>>> origin/master
 
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -68,7 +67,7 @@
 							</a>
 							<ul class="dropdown-menu" role="menu">
 								<li>{!!HTML::link('/orders/import','Import',['class'=>'btn btn-link'])!!}</li>
-								<li>{!!HTML::link('/orders','List view',['class'=>'btn btn-link'])!!}</li>
+								<li>{!!HTML::link('/orders','Table view',['class'=>'btn btn-link'])!!}</li>
 								<li>{!!HTML::link('/orders/graph','Graph view',['class'=>'btn btn-link'])!!}</li>
 							</ul>
 						</li>

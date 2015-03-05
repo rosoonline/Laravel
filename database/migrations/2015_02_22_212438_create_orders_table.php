@@ -15,38 +15,11 @@ class CreateOrdersTable extends Migration {
 		Schema::create('orders', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->string('customer_code')->default('');
-<<<<<<< HEAD
+			$table->char('customer_code', 10)->default('');
 			$table->date('date')->default('000-00-00');
-=======
-<<<<<<< HEAD
-			$table->date('date')->default('000-00-00');
-=======
-<<<<<<< HEAD
-			$table->date('date')->default('000-00-00');
-=======
-<<<<<<< HEAD
-			$table->date('date')->default('000-00-00');
-=======
-<<<<<<< HEAD
-			$table->date('date')->default('000-00-00');
-=======
-<<<<<<< HEAD
-			$table->date('date')->default('000-00-00');
-=======
-<<<<<<< HEAD
-			$table->date('date')->default('000-00-00');
-=======
->>>>>>> origin/master
->>>>>>> origin/master
->>>>>>> origin/master
->>>>>>> origin/master
->>>>>>> origin/master
->>>>>>> origin/master
->>>>>>> origin/master
-			$table->integer('sales')->unsigned()->default(0);
-			$table->decimal('revenue', 5, 2)->default('00.00');
-			$table->string('product')->default('');
+			$table->smallInteger('sales')->unsigned()->default(0);
+			$table->decimal('revenue', 8, 2)->default('0.00');
+			$table->char('product',10)->default('');
 			$table->timestamps();
 		});
 	}

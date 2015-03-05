@@ -15,8 +15,8 @@
 		  {!! Form::file('file','',array('id'=>'','class'=>'')) !!}
 		  </p>
 		  <p>
-		  {!! Form::selectMonth('month'); !!}
-		  {!! Form::selectRange('year', 2010, 2025); !!}
+			{!! Form::selectMonth('month', $month); !!}
+			{!! Form::selectRange('year', 2010, 2025, $year); !!}
 		  </p>
 		  <br />
 		  <p>

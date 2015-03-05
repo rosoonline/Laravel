@@ -13,7 +13,8 @@
 		<p>
 			{!! Form::selectMonth('month', $month); !!}
 			{!! Form::selectRange('year', 2010, 2025, $year); !!}
-			{!! Form::submit('Set Date') !!}
+			{!! Form::select('viewaxis', array('product_axis' => 'Product - x-axis', 'customer_axis' => 'Customer - x-axis')); !!}
+			{!! Form::submit('Submit') !!}
 		</p>
 		{!! Form::close() !!}
 	</p>
@@ -24,7 +25,9 @@
 			There are no orders for this date
 		@else
 			@foreach( $orders as $order )
-				<?php $products[$order->product][] = array('label' => $order->customer_code , 'y' => strval($order->totalSales)); ?>
+				<?php 
+					$products[$order->product][] = array('label' => $order->customer_code , 'y' => strval($order->totalSales));
+				?>
 			@endforeach
 
 			<?php 
@@ -45,8 +48,19 @@ $(document).ready(function() {
 
     var chart = new CanvasJS.Chart("chartContainer",
     {
+	  zoomEnabled: true,
+      panEnabled: true,
+	  exportEnabled: true,
+	  
       title:{
-        text: "Product Sales",
+        <?php
+			if ($viewaxis=='product_axis') {
+				echo 'text: "Product - Customer orders",';
+			}
+			if ($viewaxis=='customer_axis') {
+				echo 'text: "Customer - Product orders",';
+			}
+		?>
       },
       toolTip: {
         shared: true
@@ -57,30 +71,61 @@ $(document).ready(function() {
       },
       data:[
 		<?php
-			foreach ($products as $productname=>$order) { // typically $key=>$value
-				echo '
-				  {
-					type: "stackedBar",
-					name: "'.$productname.'",
-					showInLegend: "true",
-					dataPoints: [
-				';
-				
-				for ($i = 0; $i < count($customer_codes); $i++) {
-					$datapoint = 0;
-					for ($j = 0; $j < count($order); $j++) {
-						if ($order[$j]['label']==$customer_codes[$i]->code) {
-							$datapoint = $order[$j]['y'];
+		
+			if ($viewaxis=='product_axis') {
+			
+				foreach ($customer_codes as $customer_code=>$customer) {
+					echo '
+					  {
+						type: "stackedBar",
+						name: "'.$customer['code'].'",
+						showInLegend: false,
+						dataPoints: [
+					';
+						
+					foreach ($products as $productname=>$order) {
+						$datapoint = 0;
+						for ($k = 0; $k < count($order); $k++) {
+							if ($customer['code']==$order[$k]['label']) {
+								$datapoint = $order[$k]['y'];
+							}
 						}
+						echo '{y:'.$datapoint.',label:"'.$productname.'"},';
 					}
-					echo '{y: '.$datapoint.', label: "'.$customer_codes[$i]->code.'" },';
-					
+						
+					echo '
+						]
+					  },
+					';
+
 				}
-				
-				echo '
-					]
-				  },
-				';
+			}
+		
+			if ($viewaxis=='customer_axis') {
+				foreach ($products as $productname=>$order) { // typically $key=>$value
+					echo '
+					  {
+						type: "stackedBar",
+						name: "'.$productname.'",
+						showInLegend: true,
+						dataPoints: [
+					';
+					
+					for ($i = 0; $i < count($customer_codes); $i++) {
+						$datapoint = 0;
+						for ($j = 0; $j < count($order); $j++) {
+							if ($order[$j]['label']==$customer_codes[$i]->code) {
+								$datapoint = $order[$j]['y'];
+							}
+						}
+						echo '{y:'.$datapoint.',label:"'.$customer_codes[$i]->code.'"},';
+					}
+					
+					echo '
+						]
+					  },
+					';
+				}
 			}
 		?>
       ]

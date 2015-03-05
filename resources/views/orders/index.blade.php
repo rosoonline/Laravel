@@ -6,104 +6,22 @@
 	<div class="row">
 		<div class="col-md-12">
 
-<<<<<<< HEAD
     <h2>Orders - List view</h2>
-=======
-    <h2>Orders</h2>
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> origin/master
->>>>>>> origin/master
 	
 	<p>
 		{!! Form::open(array('url' => 'orders', 'method' => 'get')) !!}
 		<p>
 			{!! Form::selectMonth('month', $month); !!}
 			{!! Form::selectRange('year', 2010, 2025, $year); !!}
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-=======
-<<<<<<< HEAD
-	
-	<p>
-		{!! Form::open(array('url' => 'orders', 'method' => 'get')) !!}
-=======
-<<<<<<< HEAD
-	
-	<p>
-		{!! Form::open(array('url' => '/orders')) !!}
->>>>>>> origin/master
-		<p>
-			{!! Form::selectMonth('month', $currentmonth); !!}
-			{!! Form::selectRange('year', 2010, 2025, $currentyear); !!}
->>>>>>> origin/master
->>>>>>> origin/master
->>>>>>> origin/master
-			{!! Form::submit('Set Date') !!}
+			{!! Form::submit('Submit') !!}
 		</p>
 		{!! Form::close() !!}
 	</p>
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> origin/master
->>>>>>> origin/master
 	<p>
 		@if ( !$orders->count() )
 			There are no orders for this date
 		@else
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-=======
-<<<<<<< HEAD
-=======
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-	
-	<p>
-		{!! Form::open(array('url'=>'orders/import','files'=>true)) !!}
-
-		  {!! Form::label('file','Upload file',array('id'=>'','class'=>'')) !!}
-		  {!! Form::file('file','',array('id'=>'','class'=>'')) !!}
-		  <br/>
-		  <!-- submit buttons -->
-		  {!! Form::submit('Save') !!}
-		  
-		  <!-- reset buttons -->
-		  {!! Form::reset('Reset') !!}
-
-		{!! Form::close() !!}
-	</p>
->>>>>>> origin/master
->>>>>>> origin/master
- 
->>>>>>> origin/master
->>>>>>> origin/master
-	<p>
-		@if ( !$orders->count() )
-			You have no orders
-		@else
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> origin/master
->>>>>>> origin/master
->>>>>>> origin/master
->>>>>>> origin/master
->>>>>>> origin/master
 			<table id="table_orders" class="display">
 				<thead>
 					<tr>
@@ -117,20 +35,9 @@
 				
 				<tfoot>
 					<tr>
-<<<<<<< HEAD
 						<th></th>
 						<th></th>
 						<th colspan="2"></th>
-=======
-<<<<<<< HEAD
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-=======
-						<th colspan="4" style="text-align:right">Page total:</th>
->>>>>>> origin/master
->>>>>>> origin/master
 						<th></th>
 					</tr>
 				</tfoot>
@@ -147,87 +54,36 @@
 				@endforeach
 				</tbody>
 			</table>
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-=======
-			<ul>
-				@foreach( $orders as $order )
-					<li>
-						{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('orders.destroy', $order->slug))) !!}
-							<a href="{{ route('orders.show', $order->slug) }}">{{ $order->name }}</a>
-							(
-								{!! link_to_route('orders.edit', 'Edit', array($order->slug), array('class' => 'btn btn-info')) !!},
-								{!! Form::submit('Delete', array('class' => 'btn btn-danger')) !!}
-							)
-						{!! Form::close() !!}
-					</li>
-				@endforeach
-			</ul>
->>>>>>> origin/master
->>>>>>> origin/master
->>>>>>> origin/master
->>>>>>> origin/master
->>>>>>> origin/master
->>>>>>> origin/master
 		@endif
 	</p>
 
 		</div>
 	</div>
 </div>
-<<<<<<< HEAD
 
 <script type="text/javascript">
-=======
-<<<<<<< HEAD
-
-<script type="text/javascript">
-=======
-<<<<<<< HEAD
-
-<script type="text/javascript">
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> origin/master
-
-<!--script type="text/javascript">
->>>>>>> origin/master
->>>>>>> origin/master
->>>>>>> origin/master
 //<![CDATA[
 $(document).ready(function() {
     $('#table_orders').dataTable( {
+        "aLengthMenu": [[10, 50, 100, 150], [10, 50, 100, 150]],
+        "iDisplayLength": 10,
+		"dom": 'T<"clear">lfrtip',
+        tableTools: {
+            "sSwfPath": "/laravel/public/swf/copy_csv_xls_pdf.swf",
+			"aButtons": [
+				{'sExtends':'copy',
+				  "oSelectorOpts": { page: 'current', order: 'current' },
+				  "sToolTip": "Copy data to clipboard",
+				},
+				{'sExtends':'csv',
+				  "oSelectorOpts": { page: 'current', order: 'current' },
+				},
+				{'sExtends':'pdf',
+				  "oSelectorOpts": { page: 'current', order: 'current' },
+				},
+			]
+        },
 	
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-=======
-<<<<<<< HEAD
-
-<script type="text/javascript">
-//<![CDATA[
-$(document).ready(function() {
-    $('#table_orders').dataTable( {
->>>>>>> origin/master
->>>>>>> origin/master
->>>>>>> origin/master
->>>>>>> origin/master
->>>>>>> origin/master
         "footerCallback": function ( row, data, start, end, display ) {
             var api = this.api(), data;
  
@@ -239,10 +95,6 @@ $(document).ready(function() {
                         i : 0;
             };
  
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> origin/master
             // Sales total over all pages
             totalSales = api
                 .column( 2 )
@@ -261,20 +113,10 @@ $(document).ready(function() {
  
             // Update footer for sales column
             $( api.column( 2 ).footer() ).html(
-<<<<<<< HEAD
-                'Sales '+pageTotalSales +' ( '+ totalSales +' month total)'
+                'Sales: Filtered '+pageTotalSales +' ( Unfiltered '+ totalSales +' )'
             );
  
             // Revenue total over all pages
-=======
-                'Sales '+pageTotalSales +' ( '+ totalSales +' total)'
-            );
- 
-            // Revenue total over all pages
-=======
-            // Total over all pages
->>>>>>> origin/master
->>>>>>> origin/master
             total = api
                 .column( 4 )
                 .data()
@@ -282,15 +124,7 @@ $(document).ready(function() {
                     return intVal(a) + intVal(b);
                 } );
  
-<<<<<<< HEAD
             // Revenue total over this page
-=======
-<<<<<<< HEAD
-            // Revenue total over this page
-=======
-            // Total over this page
->>>>>>> origin/master
->>>>>>> origin/master
             pageTotal = api
                 .column( 4, { page: 'current'} )
                 .data()
@@ -298,31 +132,10 @@ $(document).ready(function() {
                     return intVal(a) + intVal(b);
                 }, 0 );
  
-<<<<<<< HEAD
             // Update footer for revenue column
             $( api.column( 4 ).footer() ).html(
-                'Revenue &pound;'+pageTotal +' ( &pound;'+ total +' month total)'
+                'Revenue Filtered &pound;'+pageTotal.toFixed(2) +' ( Unfiltered &pound;'+ total.toFixed(2) +' )'
             );
-=======
-<<<<<<< HEAD
-            // Update footer for revenue column
-            $( api.column( 4 ).footer() ).html(
-                'Revenue &pound;'+pageTotal +' ( &pound;'+ total +' total)'
-            );
-=======
-            // Update footer
-            $( api.column( 4 ).footer() ).html(
-                '&pound;'+pageTotal +' ( &pound;'+ total +' total)'
-            );
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> origin/master
->>>>>>> origin/master
->>>>>>> origin/master
->>>>>>> origin/master
         },
 		
 		"oLanguage": {
@@ -332,30 +145,6 @@ $(document).ready(function() {
     } );
 } );
 //]]>
-<<<<<<< HEAD
 </script> 
-=======
-<<<<<<< HEAD
-</script> 
-=======
-<<<<<<< HEAD
-</script> 
-=======
-</script--> 
-<<<<<<< HEAD
-=======
-=======
-        }
-    } );
-} );
-//]]>
-</script> 
-=======
->>>>>>> origin/master
->>>>>>> origin/master
->>>>>>> origin/master
->>>>>>> origin/master
->>>>>>> origin/master
->>>>>>> origin/master
 	
 @endsection
