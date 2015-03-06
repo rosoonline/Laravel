@@ -13,7 +13,12 @@
 		<p>
 			{!! Form::selectMonth('month', $month); !!}
 			{!! Form::selectRange('year', 2010, 2025, $year); !!}
-			{!! Form::select('viewaxis', array('product_axis' => 'Product - x-axis', 'customer_axis' => 'Customer - x-axis')); !!}
+			{!! Form::select('viewaxis', array(
+											'pc_sales' => 'Product vs customer sales', 
+											'cp_sales' => 'Customer vs product sales',
+											'pc_revenue' => 'Product vs customer revenue',
+											'cp_revenue' => 'Customer vs product revenue',
+										), $viewaxis); !!}
 			{!! Form::submit('Submit') !!}
 		</p>
 		{!! Form::close() !!}
@@ -26,7 +31,7 @@
 		@else
 			@foreach( $orders as $order )
 				<?php 
-					$products[$order->product][] = array('label' => $order->customer_code , 'y' => strval($order->totalSales));
+					$products[$order->product][] = array('label' => $order->customer_code , 'y' => strval($order->total));
 				?>
 			@endforeach
 
@@ -54,11 +59,17 @@ $(document).ready(function() {
 	  
       title:{
         <?php
-			if ($viewaxis=='product_axis') {
-				echo 'text: "Product - Customer orders",';
+			if ($viewaxis=='pc_sales') {
+				echo 'text: "Product - Customer sales",';
 			}
-			if ($viewaxis=='customer_axis') {
-				echo 'text: "Customer - Product orders",';
+			if ($viewaxis=='pc_revenue') {
+				echo 'text: "Product - Customer revenue (\u00A3)",';
+			}
+			if ($viewaxis=='cp_sales') {
+				echo 'text: "Customer - Product sales",';
+			}
+			if ($viewaxis=='cp_revenue') {
+				echo 'text: "Customer - Product revenue (\u00A3)",';
 			}
 		?>
       },
@@ -72,9 +83,8 @@ $(document).ready(function() {
       data:[
 		<?php
 		
-			if ($viewaxis=='product_axis') {
-			
-				foreach ($customer_codes as $customer_code=>$customer) {
+			if ($viewaxis=='pc_sales' || $viewaxis=='pc_revenue') {
+				foreach ($customer_codes as $customer_code=>$customer) { // typically $key=>$value
 					echo '
 					  {
 						type: "stackedBar",
@@ -97,12 +107,11 @@ $(document).ready(function() {
 						]
 					  },
 					';
-
 				}
 			}
 		
-			if ($viewaxis=='customer_axis') {
-				foreach ($products as $productname=>$order) { // typically $key=>$value
+			if ($viewaxis=='cp_sales' || $viewaxis=='cp_revenue') {
+				foreach ($products as $productname=>$order) {
 					echo '
 					  {
 						type: "stackedBar",

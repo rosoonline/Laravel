@@ -48,12 +48,22 @@ class OrdersController extends Controller {
 		$year 			= \Request::get('year',date('Y'));
 		$viewaxis 		= \Request::get('viewaxis','product_axis');
 
-		$orders 		= Order::select(DB::raw('customer_code, product, SUM(sales) as totalSales'))
+		if ($viewaxis=='pc_sales' || $viewaxis=='cp_sales') {
+		$orders 		= Order::select(DB::raw('customer_code, product, SUM(sales) as total'))
 								->where('date', '=', $year.'-'.$month.'-01')
 								->groupBy('customer_code','product')
 								->orderBy('customer_code', 'DESC')
 								->get();
-								
+		}				
+		
+		if ($viewaxis=='pc_revenue' || $viewaxis=='cp_revenue') {
+			$orders 		= Order::select(DB::raw('customer_code, product, SUM(revenue) as total'))
+								->where('date', '=', $year.'-'.$month.'-01')
+								->groupBy('customer_code','product')
+								->orderBy('customer_code', 'DESC')
+								->get();
+		}		
+		
 		$customer_codes		= Order::select(DB::raw('customer_code as code'))
 								->where('date', '=', $year.'-'.$month.'-01')	
 								->groupBy('customer_code')
