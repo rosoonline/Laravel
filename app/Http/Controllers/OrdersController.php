@@ -47,8 +47,8 @@ class OrdersController extends Controller {
 		$month 			= str_pad(\Request::input('month', date('m')), 2, "0", STR_PAD_LEFT);
 		$year 			= \Request::get('year',date('Y'));
 		$viewaxis 		= \Request::get('viewaxis','pc_sales');
-		$chartTitle		= Order::getChartTitle($viewaxis);	
 		$canvasData 	= Order::getCanvasData($viewaxis);
+		if ($canvasData) {$chartTitle = Order::getChartTitle($viewaxis);} else {$chartTitle = 'There are no orders for date selected.';}
 								
 		return view('orders.graph', compact('orders'))->with('month', $month)->with('year', $year)->with('viewaxis', $viewaxis)->with('chartTitle', $chartTitle)->with('canvasData', $canvasData);
 		//return view('orders.index', array('orders' => $orders));
