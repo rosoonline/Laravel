@@ -47,31 +47,10 @@ class OrdersController extends Controller {
 		$month 			= str_pad(\Request::input('month', date('m')), 2, "0", STR_PAD_LEFT);
 		$year 			= \Request::get('year',date('Y'));
 		$viewaxis 		= \Request::get('viewaxis','pc_sales');
-		$chartTitle		= Order::getChartTitle($viewaxis);
-		
-		$customer_codes		= Order::select(DB::raw('customer_code as code'))
-						->where('date', '=', $year.'-'.$month.'-01')	
-						->groupBy('customer_code')
-						->orderBy('customer_code', 'ASC')
-						->get();
-
-		if ($viewaxis=='pc_sales' || $viewaxis=='cp_sales') {
-		$orders 		= Order::select(DB::raw('customer_code, product, SUM(sales) as total'))
-								->where('date', '=', $year.'-'.$month.'-01')
-								->groupBy('customer_code','product')
-								->orderBy('customer_code', 'DESC')
-								->get();
-		}				
-		
-		if ($viewaxis=='pc_revenue' || $viewaxis=='cp_revenue') {
-			$orders 		= Order::select(DB::raw('customer_code, product, SUM(revenue) as total'))
-								->where('date', '=', $year.'-'.$month.'-01')
-								->groupBy('customer_code','product')
-								->orderBy('customer_code', 'DESC')
-								->get();
-		}		
+		$chartTitle		= Order::getChartTitle($viewaxis);	
+		$canvasData 	= Order::getCanvasData($viewaxis);
 								
-		return view('orders.graph', compact('orders'))->with('month', $month)->with('year', $year)->with('customer_codes', $customer_codes)->with('viewaxis', $viewaxis)->with('chartTitle', $chartTitle);
+		return view('orders.graph', compact('orders'))->with('month', $month)->with('year', $year)->with('viewaxis', $viewaxis)->with('chartTitle', $chartTitle)->with('canvasData', $canvasData);
 		//return view('orders.index', array('orders' => $orders));
 	}
 	
