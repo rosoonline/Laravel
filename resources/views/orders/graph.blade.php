@@ -25,7 +25,7 @@
 	</p>
 	
 	<p>
-		<?php $data_points = array(); $products = array(); ?>
+		<?php $products = array(); ?>
 		@if ( !$orders->count() )
 			There are no orders for this date
 		@else
@@ -34,10 +34,6 @@
 					$products[$order->product][] = array('label' => $order->customer_code , 'y' => strval($order->total));
 				?>
 			@endforeach
-
-			<?php 
-				//$graphdata = json_encode($products, JSON_NUMERIC_CHECK);
-			?>
 		
 			<div id="chartContainer" style="height: 600px; width: 100%;">
 		@endif
@@ -58,20 +54,7 @@ $(document).ready(function() {
 	  exportEnabled: true,
 	  
       title:{
-        <?php
-			if ($viewaxis=='pc_sales') {
-				echo 'text: "Product - Customer sales",';
-			}
-			if ($viewaxis=='pc_revenue') {
-				echo 'text: "Product - Customer revenue (\u00A3)",';
-			}
-			if ($viewaxis=='cp_sales') {
-				echo 'text: "Customer - Product sales",';
-			}
-			if ($viewaxis=='cp_revenue') {
-				echo 'text: "Customer - Product revenue (\u00A3)",';
-			}
-		?>
+		text: '{{ $chartTitle }}',
       },
       toolTip: {
         shared: true
@@ -85,12 +68,13 @@ $(document).ready(function() {
 		
 			if ($viewaxis=='pc_sales' || $viewaxis=='pc_revenue') {
 				foreach ($customer_codes as $customer_code=>$customer) { // typically $key=>$value
+					$data_points = array();
 					echo '
 					  {
 						type: "stackedBar",
 						name: "'.$customer['code'].'",
 						showInLegend: false,
-						dataPoints: [
+						dataPoints: 
 					';
 						
 					foreach ($products as $productname=>$order) {
@@ -100,11 +84,13 @@ $(document).ready(function() {
 								$datapoint = $order[$k]['y'];
 							}
 						}
-						echo '{y:'.$datapoint.',label:"'.$productname.'"},';
+						$point = array("label" => $productname, "y" => $datapoint);
+						array_push($data_points, $point);
 					}
+					
+					echo json_encode($data_points, JSON_NUMERIC_CHECK);
 						
 					echo '
-						]
 					  },
 					';
 				}
@@ -112,12 +98,13 @@ $(document).ready(function() {
 		
 			if ($viewaxis=='cp_sales' || $viewaxis=='cp_revenue') {
 				foreach ($products as $productname=>$order) {
+					$data_points = array();
 					echo '
 					  {
 						type: "stackedBar",
 						name: "'.$productname.'",
 						showInLegend: true,
-						dataPoints: [
+						dataPoints: 
 					';
 					
 					for ($i = 0; $i < count($customer_codes); $i++) {
@@ -127,11 +114,13 @@ $(document).ready(function() {
 								$datapoint = $order[$j]['y'];
 							}
 						}
-						echo '{y:'.$datapoint.',label:"'.$customer_codes[$i]->code.'"},';
+						$point = array("label" => $customer_codes[$i]->code, "y" => $datapoint);
+						array_push($data_points, $point);
 					}
+
+					echo json_encode($data_points, JSON_NUMERIC_CHECK);
 					
 					echo '
-						]
 					  },
 					';
 				}
@@ -146,5 +135,5 @@ $(document).ready(function() {
 });
 //]]>
 </script> 
-	
+	<?php //echo json_encode($data_points, JSON_NUMERIC_CHECK); ?>
 @endsection

@@ -46,7 +46,14 @@ class OrdersController extends Controller {
 	{
 		$month 			= str_pad(\Request::input('month', date('m')), 2, "0", STR_PAD_LEFT);
 		$year 			= \Request::get('year',date('Y'));
-		$viewaxis 		= \Request::get('viewaxis','product_axis');
+		$viewaxis 		= \Request::get('viewaxis','pc_sales');
+		$chartTitle		= Order::getChartTitle($viewaxis);
+		
+		$customer_codes		= Order::select(DB::raw('customer_code as code'))
+						->where('date', '=', $year.'-'.$month.'-01')	
+						->groupBy('customer_code')
+						->orderBy('customer_code', 'ASC')
+						->get();
 
 		if ($viewaxis=='pc_sales' || $viewaxis=='cp_sales') {
 		$orders 		= Order::select(DB::raw('customer_code, product, SUM(sales) as total'))
@@ -63,14 +70,8 @@ class OrdersController extends Controller {
 								->orderBy('customer_code', 'DESC')
 								->get();
 		}		
-		
-		$customer_codes		= Order::select(DB::raw('customer_code as code'))
-								->where('date', '=', $year.'-'.$month.'-01')	
-								->groupBy('customer_code')
-								->orderBy('customer_code', 'ASC')
-								->get();
 								
-		return view('orders.graph', compact('orders'))->with('month', $month)->with('year', $year)->with('customer_codes', $customer_codes)->with('viewaxis', $viewaxis);
+		return view('orders.graph', compact('orders'))->with('month', $month)->with('year', $year)->with('customer_codes', $customer_codes)->with('viewaxis', $viewaxis)->with('chartTitle', $chartTitle);
 		//return view('orders.index', array('orders' => $orders));
 	}
 	

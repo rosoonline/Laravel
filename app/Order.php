@@ -47,5 +47,14 @@ class Order extends Model {
 		return true;
 		
 	}
+	
+	protected function getChartTitle($viewaxis) {
+			$chartTitle = (string) '';
+			if ($viewaxis=='pc_sales') 		{$chartTitle='Product - Customer sales';}
+			if ($viewaxis=='pc_revenue') 	{$chartTitle='Product - Customer revenue (\u00A3)';}
+			if ($viewaxis=='cp_sales') 		{$chartTitle='Customer - Product sales';}
+			if ($viewaxis=='cp_revenue') 	{$chartTitle='Customer - Product revenue (\u00A3)';}
+			return $chartTitle;
+	}
 
 }
