@@ -53,33 +53,29 @@ class Order extends Model {
 		$month 			= str_pad(\Request::input('month', date('m')), 2, "0", STR_PAD_LEFT);
 		$year 			= \Request::get('year',date('Y'));
 	
-		$customer_codes		= Order::select(DB::raw('customer_code as code'))
+		$customer_codes	= Order::select(DB::raw('customer_code as code'))
 					->where('date', '=', $year.'-'.$month.'-01')	
 					->groupBy('customer_code')
 					->orderBy('customer_code', 'ASC')
 					->get();
+					
+		$product_codes	= Order::select(DB::raw('product as code'))
+					->where('date', '=', $year.'-'.$month.'-01')	
+					->groupBy('product')
+					->orderBy('product', 'ASC')
+					->get();
 	
 		if ($viewaxis=='pc_sales' || $viewaxis=='cp_sales') {
-		$orders 		= Order::select(DB::raw('customer_code, product, SUM(sales) as total'))
-								->where('date', '=', $year.'-'.$month.'-01')
-								->groupBy('customer_code','product')
-								->orderBy('customer_code', 'DESC')
-								->get();								
+			$sumField = 'sales';
 		}
-		
 		if ($viewaxis=='pc_revenue' || $viewaxis=='cp_revenue') {
-			$orders 	= Order::select(DB::raw('customer_code, product, SUM(revenue) as total'))
+			$sumField = 'revenue';
+		}
+		$orders = Order::select(DB::raw('customer_code, product, SUM('.$sumField.') as total'))
 								->where('date', '=', $year.'-'.$month.'-01')
 								->groupBy('customer_code','product')
 								->orderBy('customer_code', 'DESC')
 								->get();
-		}
-		
-		if ($orders) {
-			foreach ($orders as $order) {
-				$products[$order->product][] = array('label' => $order->customer_code , 'y' => strval($order->total));
-			}
-		}
 		
 		$string = (string)'';
 		
@@ -94,14 +90,21 @@ class Order extends Model {
 					dataPoints: 
 				';
 					
-				foreach ($products as $productname=>$order) {
-					$datapoint = 0;
-					for ($k = 0; $k < count($order); $k++) {
-						if ($customer['code']==$order[$k]['label']) {
-							$datapoint = $order[$k]['y'];
+				$customer_orders 	= Order::select(DB::raw('product, SUM('.$sumField.') as total'))
+						->where('date', '=', $year.'-'.$month.'-01')
+						->where('customer_code', '=', $customer['code'])
+						->groupBy('product','product')
+						->orderBy('product', 'DESC')
+						->get();
+
+				for ($k = 0; $k < count($product_codes); $k++) {
+					$dataTotal = 0; // if a product code doesnt match a product code from an order, than its salesTotal is assumed to be zero
+					for ($l = 0; $l < count($customer_orders); $l++) {
+						if ($product_codes[$k]->code==$customer_orders[$l]->product) { // if an order matches a product code, then get product sales total
+							$dataTotal = (int)$customer_orders[$l]->total;
 						}
 					}
-					$point = array("label" => $productname, "y" => $datapoint);
+					$point = array("label" => $product_codes[$k]->code, "y" => $dataTotal); // for each product code, get the sales total and add to datapoints array
 					array_push($data_points, $point);
 				}
 				
@@ -113,7 +116,7 @@ class Order extends Model {
 			}
 		}
 		
-		if ($viewaxis=='cp_sales' || $viewaxis=='cp_revenue') {
+		/*if ($viewaxis=='cp_sales' || $viewaxis=='cp_revenue') {
 			foreach ($products as $productname=>$order) {
 				$data_points = array();
 				$string .= '
@@ -141,7 +144,7 @@ class Order extends Model {
 				  },
 				';
 			}
-		}
+		}*/
 		
 		return $string;
 		
