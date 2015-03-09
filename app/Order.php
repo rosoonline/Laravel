@@ -93,8 +93,7 @@ class Order extends Model {
 				$customer_orders 	= Order::select(DB::raw('product, SUM('.$sumField.') as total'))
 						->where('date', '=', $year.'-'.$month.'-01')
 						->where('customer_code', '=', $customer['code'])
-						->groupBy('product','product')
-						->orderBy('product', 'DESC')
+						->groupBy('product')
 						->get();
 
 				for ($k = 0; $k < count($product_codes); $k++) {
@@ -116,35 +115,43 @@ class Order extends Model {
 			}
 		}
 		
-		/*if ($viewaxis=='cp_sales' || $viewaxis=='cp_revenue') {
-			foreach ($products as $productname=>$order) {
+		if ($viewaxis=='cp_sales' || $viewaxis=='cp_revenue') {
+			foreach ($product_codes as $product_code=>$product) {
 				$data_points = array();
 				$string .= '
 				  {
 					type: "stackedBar",
-					name: "'.$productname.'",
-					showInLegend: true,
+					name: "'.$product->code.'",
+					showInLegend: false,
 					dataPoints: 
 				';
-				
+					
+				$customer_orders 	= Order::select(DB::raw('customer_code as code, SUM('.$sumField.') as total'))
+						->where('date', '=', $year.'-'.$month.'-01')
+						->where('product', '=', $product->code)
+						->groupBy('customer_code')
+						->get();
+
 				for ($i = 0; $i < count($customer_codes); $i++) {
-					$datapoint = 0;
-					for ($j = 0; $j < count($order); $j++) {
-						if ($order[$j]['label']==$customer_codes[$i]->code) {
-							$datapoint = $order[$j]['y'];
+					// try a sql pull here to get all customer_orders based on date, product and customer_code
+					// then loop through the results, pushing points to the datapoint array
+					$dataTotal = 0;
+					for ($l = 0; $l < count($customer_orders); $l++) {
+						if ($customer_codes[$i]->code==$customer_orders[$l]->code) {
+							$dataTotal = (int)$customer_orders[$l]->total;
 						}
 					}
-					$point = array("label" => $customer_codes[$i]->code, "y" => $datapoint);
+					$point = array("label" => $customer_codes[$i]->code, "y" => $dataTotal);
 					array_push($data_points, $point);
 				}
-
-				$string .= json_encode($data_points, JSON_NUMERIC_CHECK);
 				
+				$string .= json_encode($data_points, JSON_NUMERIC_CHECK);
+					
 				$string .= '
 				  },
 				';
 			}
-		}*/
+		}
 		
 		return $string;
 		
