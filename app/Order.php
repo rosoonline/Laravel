@@ -108,7 +108,19 @@ class Order extends Model {
 			}
 		}
 		
-		if ($viewaxis=='cp_sales' || $viewaxis=='cp_revenue') {
+		if ($viewaxis=='cp_sales' || $viewaxis=='cp_revenue') { // dynamic cross-tab mysql up in this mother-trucker
+		
+			$query = 'customer_code';
+			foreach ($product_codes as $product_code=>$product) {
+				$query .= ", SUM(CASE WHEN product = '".$product->code."' THEN ".$sumField." ELSE 0 END) `".$product->code."`";
+			}
+
+			$customer_orders = Order::select(DB::raw($query))
+				->where('date', '=', $year.'-'.$month.'-01')
+				->groupBy('customer_code')
+				->OrderBy('customer_code','DESC')
+				->get(); // toSql();
+
 			foreach ($product_codes as $product_code=>$product) {
 				$data_points = array();
 				$string .= '
@@ -119,21 +131,8 @@ class Order extends Model {
 					dataPoints: 
 				';
 
-				for ($i = 0; $i < count($customer_codes); $i++) {
-				
-					$customer_orders = Order::select(DB::raw('customer_code as code, SUM('.$sumField.') as total'))
-							->where('date', '=', $year.'-'.$month.'-01')
-							->where('product', '=', $product->code)
-							->where('customer_code', '=', $customer_codes[$i]->code)
-							->groupBy('customer_code')
-							->get();
-							
-					$dataTotal = 0;
-					if(count($customer_orders) > 0) {
-						$dataTotal = (int)$customer_orders[0]->total;
-					}
-					
-					$point = array("label" => $customer_codes[$i]->code, "y" => $dataTotal);
+				for ($l = 0; $l < count($customer_orders); $l++) {
+					$point = array("label" => $customer_orders[$l]->customer_code, "y" => $customer_orders[$l]->{$product->code}); // pulling in columns named after each product dynamically using {}
 					array_push($data_points, $point);
 				}
 				
