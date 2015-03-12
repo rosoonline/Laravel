@@ -58,7 +58,7 @@ class Order extends Model {
 					->groupBy('customer_code')
 					->get();
 					
-		$product_codes	= Order::select(DB::raw('product as code'))
+		$product_codes = Order::select(DB::raw('product as code'))
 					->where('date', '=', $year.'-'.$month.'-01')	
 					->groupBy('product')
 					->get();
@@ -70,57 +70,49 @@ class Order extends Model {
 			$sumField = 'revenue';
 		}
 		
-		$string = (string)'';
-		
-		if ($viewaxis=='pc_sales' || $viewaxis=='pc_revenue') {
-			foreach ($customer_codes as $customer_code=>$customer) { // typically $key=>$value
-				$data_points = array();
-				$string .= '
-				  {
-					type: "stackedBar",
-					name: "'.$customer['code'].'",
-					showInLegend: false,
-					dataPoints: 
-				';
-					
-				$customer_orders = Order::select(DB::raw('product, SUM('.$sumField.') as total'))
-						->where('date', '=', $year.'-'.$month.'-01')
-						->where('customer_code', '=', $customer['code'])
-						->groupBy('product')
-						->get();
-
-				for ($k = 0; $k < count($product_codes); $k++) {
-					$dataTotal = 0; // if a product code doesnt match a product code from an order, than its salesTotal is assumed to be zero
-					for ($l = 0; $l < count($customer_orders); $l++) {
-						if ($product_codes[$k]->code==$customer_orders[$l]->product) { // if an order matches a product code, then get product sales total
-							$dataTotal = (int)$customer_orders[$l]->total;
-						}
-					}
-					$point = array("label" => $product_codes[$k]->code, "y" => $dataTotal); // for each product code, get the sales total and add to datapoints array
-					array_push($data_points, $point);
-				}
-				
-				$string .= json_encode($data_points, JSON_NUMERIC_CHECK);
-					
-				$string .= '
-				  },
-				';
-			}
+		// dynamic cross-tab table - generates a table listing all the customers, with each product named as a table column that holds its sales/revenue total
+		$query = 'customer_code';
+		foreach ($product_codes as $product_code=>$product) {
+			$query .= ", SUM(CASE WHEN product = '".$product->code."' THEN ".$sumField." ELSE 0 END) `".$product->code."`";
 		}
 		
-		if ($viewaxis=='cp_sales' || $viewaxis=='cp_revenue') { // dynamic cross-tab mysql up in this mother-trucker
+		$customer_orders = Order::select(DB::raw($query))
+			->where('date', '=', $year.'-'.$month.'-01')
+			->groupBy('customer_code')
+			->OrderBy('customer_code','DESC')
+			->get(); // toSql();
+		// end of cross-tab table
 		
-			$query = 'customer_code';
-			foreach ($product_codes as $product_code=>$product) {
-				$query .= ", SUM(CASE WHEN product = '".$product->code."' THEN ".$sumField." ELSE 0 END) `".$product->code."`";
-			}
+		$string = (string)'';
+		
+		// graph - product vs client sales/revenue
+		if ($viewaxis=='pc_sales' || $viewaxis=='pc_revenue') {
 
-			$customer_orders = Order::select(DB::raw($query))
-				->where('date', '=', $year.'-'.$month.'-01')
-				->groupBy('customer_code')
-				->OrderBy('customer_code','DESC')
-				->get(); // toSql();
-
+				for ($l = 0; $l < count($customer_orders); $l++) {
+					$data_points = array();
+					$string .= '
+					  {
+						type: "stackedBar",
+						name: "'.$customer_orders[$l]->customer_code.'",
+						showInLegend: false,
+						dataPoints: 
+					';
+					
+					foreach ($product_codes as $product_code=>$product) {
+						$point = array("label" => $product->code, "y" => $customer_orders[$l]->{$product->code}); // pull in columns named after each product dynamically using {}
+						array_push($data_points, $point);
+					}
+					
+					$string .= json_encode($data_points, JSON_NUMERIC_CHECK);
+					$string .= '
+					  },
+					';					
+				}
+		}
+		
+		// graph - customer vs product sales/revenue
+		if ($viewaxis=='cp_sales' || $viewaxis=='cp_revenue') {
+		
 			foreach ($product_codes as $product_code=>$product) {
 				$data_points = array();
 				$string .= '
@@ -132,12 +124,11 @@ class Order extends Model {
 				';
 
 				for ($l = 0; $l < count($customer_orders); $l++) {
-					$point = array("label" => $customer_orders[$l]->customer_code, "y" => $customer_orders[$l]->{$product->code}); // pulling in columns named after each product dynamically using {}
+					$point = array("label" => $customer_orders[$l]->customer_code, "y" => $customer_orders[$l]->{$product->code}); // pull in columns named after each product dynamically using {}
 					array_push($data_points, $point);
 				}
 				
 				$string .= json_encode($data_points, JSON_NUMERIC_CHECK);
-					
 				$string .= '
 				  },
 				';
@@ -145,7 +136,6 @@ class Order extends Model {
 		}
 		
 		return $string;
-		
 	}
 	
 	protected function getChartTitle($viewaxis) {
